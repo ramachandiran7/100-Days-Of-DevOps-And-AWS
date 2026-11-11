@@ -45,7 +45,8 @@
 - **Objective:** Disable direct root user login over SSH to prevent automated brute-force entry attempts.
 - **Execution:**
   ```bash
-  
+  sudo vi /etc/ssh/sshd_config
+  sudo systemctl restart sshd
   ```
 - **Security Value:** Enforces the use of standard users with explicit escalation privileges, shielding administrative vectors.
 - **Verification:** ![Day 3 Verification](./screenshots/devops-day03.png)
