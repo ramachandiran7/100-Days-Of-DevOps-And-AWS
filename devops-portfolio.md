@@ -50,7 +50,7 @@ sudo vi /etc/ssh/sshd_config
  ```
 2. Uncomment and update the line to:text
 PermitRootLogin no
-	4. Restart the SSH service to apply changes
+3. Restart the SSH service to apply changes
  ```bash
 sudo systemctl restart sshd
  ```
