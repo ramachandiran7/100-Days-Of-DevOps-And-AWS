@@ -61,7 +61,7 @@ sudo systemctl restart sshd
 - **Objective:** Securely assign appropriate filesystem execution bits to automated infrastructure scripts.
 - **Execution:**
   ```bash
-  
+  sudo chmod 755 /tmp/xfusioncorp.sh
   ```
 - **Security Value:** Restricts administrative file execution privileges exclusively to authorized identity contexts.
 - **Verification:** ![Day 4 Verification](./screenshots/devops-day04.png)
