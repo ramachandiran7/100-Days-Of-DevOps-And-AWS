@@ -138,7 +138,16 @@ sudo systemctl restart sshd
 - **Objective:** Deploy the agentless orchestration and configuration engine on a centralized control node.
 - **Execution:**
   ```bash
-  
+  pip3 --version
+  ```
+  ```bash
+  sudo pip3 install ansible==4.8.0
+  ```
+  ```bash
+  ansible --version
+  ```
+  ```bash
+  Which ansible
   ```
 - **Security Value:** Enables declarative system configuration validation and uniform fleet state parity.
 - **Verification:** ![Day 8 Verification](./screenshots/devops-day08.png)
