@@ -1,4 +1,4 @@
-# 100 Days of Advanced DevOps Engineering
+ddddddddddddddddddddddddddddddddddddddd# 100 Days of Advanced DevOps Engineering
 **Engineer:** RAMACHANDIRAN S | **Status:** Active Practice | **Target Position:** DevOps / Infrastructure Engineer
 
 > **Daily update:** After completing a module, update its status, add the commands/configuration you used, record the result, and place screenshots in `screenshots/` using the matching day filename.
@@ -70,8 +70,14 @@ sudo systemctl restart sshd
 - **Objective:** Deploy and enforce host-level Mandatory Access Control (MAC) security boundaries.
 - **Execution:**
   ```bash
-  
+  sudo dnf install -y policycoreutils policycoreutils-python-utils selinux-policy selinux-policy-targeted libselinux-utils setools-console mcstrans
   ```
+   ```bash
+   sudo sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+   ```
+   ```bash
+   grep ^SELINUX= /etc/selinux/config
+   ```
 - **Security Value:** Confines rogue process interactions even if underlying web applications are compromised.
 - **Verification:** ![Day 5 Verification](./screenshots/devops-day05.png)
 
@@ -79,7 +85,25 @@ sudo systemctl restart sshd
 - **Objective:** Configure recurring automated background runtime operations using the crontab scheduler.
 - **Execution:**
   ```bash
-  
+  sudo -i
+  ```
+  ```bash
+  dnf install -y cronie
+  ```
+    ```bash
+  systemctl enable --now crond
+  ```
+  ```bash
+  (crontab -l 2>/dev/null; echo "*/5 * * * * echo hello > /tmp/cron_text") | crontab -
+  ```
+  ```bash
+  (crontab -l 2>/dev/null; echo "*/5 * * * * echo hello > /tmp/cron_text") | crontab -
+  ```
+  ```bash
+  systemctl status crond
+  ```
+  ```bash
+  crontab -l
   ```
 - **Security Value:** Standardizes regular host execution patterns for updates, log rotations, and cleanups.
 - **Verification:** ![Day 6 Verification](./screenshots/devops-day06.png)
@@ -88,7 +112,24 @@ sudo systemctl restart sshd
 - **Objective:** Replace legacy password access with robust, asymmetric cryptographic key authentication.
 - **Execution:**
   ```bash
-  
+  whoami
+  ```
+  ```bash
+  ssh-keygen -t rsa
+  ```
+  ```bash
+  ssh-copy-id tony@stapp01
+  ```
+  ```bash
+  ssh-copy-id steve@stapp02
+  ```
+   ```bash
+  ssh-copy-id banner@stapp03
+  ```
+  ```bash
+  ssh tony@stapp01 hostname
+  ssh steve@stapp02 hostname
+  ssh banner@stapp03 hostname
   ```
 - **Security Value:** Eliminates the possibility of password cracking vectors across exposed network interfaces.
 - **Verification:** ![Day 7 Verification](./screenshots/devops-day07.png)
