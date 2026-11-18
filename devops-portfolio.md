@@ -1,4 +1,4 @@
-ddddddddddddddddddddddddddddddddddddddd# 100 Days of Advanced DevOps Engineering
+# 100 Days of Advanced DevOps Engineering
 **Engineer:** RAMACHANDIRAN S | **Status:** Active Practice | **Target Position:** DevOps / Infrastructure Engineer
 
 > **Daily update:** After completing a module, update its status, add the commands/configuration you used, record the result, and place screenshots in `screenshots/` using the matching day filename.
@@ -156,7 +156,31 @@ sudo systemctl restart sshd
 - **Objective:** Diagnose and rectify operational blocks, query deadlocks, and relational connection errors.
 - **Execution:**
   ```bash
-  
+  sudo su
+  ```
+   ```bash
+  systemctl status mariadb
+  ```
+   ```bash
+  journalctl -xeu mariadb
+  ```
+   ```bash
+  mkdir -p /var/lib/mysql
+  ```
+   ```bash
+  mkdir -p /var/lib/mysql
+  ```
+   ```bash
+  chown -R mysql:mysql /var/lib/mysql
+  ```
+   ```bash
+  chmod 755 /var/lib/mysql
+  ```
+   ```bash
+  systemctl start mariadb
+  ```
+   ```bash
+  systemctl status mariadb
   ```
 - **Security Value:** Restores business high availability models and protects local database storage engines under load stress.
 - **Verification:** ![Day 9 Verification](./screenshots/devops-day09.png)
