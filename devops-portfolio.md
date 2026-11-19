@@ -9,7 +9,7 @@
 
 | Phase  | Modules & Core Technologies                 | Target Horizon | Status                          |
 | :---   | :---                                        | :---           | :---                            |
-| **01** | Linux Systems & Host Hardening              | Days 01 - 20   | 🔄 In Progress (Days 1-2 Done) |
+| **01** | Linux Systems & Host Hardening              | Days 01 - 20   | 🔄 In Progress (Days 1-10 Done) |
 | **02** | Git Version Control & Distributed Workflows | Days 21 - 34   | ⏳ Pending                     |
 | **03** | Docker Containerization & Microservices     | Days 35 - 47   | ⏳ Pending                     |
 | **04** | Kubernetes Cluster Orchestration            | Days 48 - 67   | ⏳ Pending                     |
@@ -189,6 +189,69 @@ sudo systemctl restart sshd
 - **Objective:** Construct functional shell programs containing explicit logic handling and error capturing mechanisms.
 - **Execution:**
   ```bash
+  sudo yum install -y zip
+  ```
+    ```bash
+  sudo chown -R steve:steve /archives /scripts
+  ```
+    ```bash
+  ssh-keygen -t rsa -b 2048
+
+  ```
+    ```bash
+  ssh-copy-id natasha@ststor01
+  ```
+    ```bash
+  ssh natasha@ststor01 "ls -ld /archives"
+  ```
+    ```bash
+  cat << 'EOF' > /scripts/blog_archive.sh
+#!/bin/bash
+
+# Create a zip archive of the /var/www/html/blog directory
+zip -r /archives/xfusioncorp_blog.zip /var/www/html/blog
+
+# Copy the archive to the Nautilus Storage Server without password prompts
+scp /archives/xfusioncorp_blog.zip natasha@ststor01:/archives/
+EOF
+
+  ```
+    ```bash
+  # Grant execute permissions
+chmod +x /scripts/blog_archive.sh
+
+# Run the script once as steve to verify
+/scripts/blog_archive.sh
+
+# Confirm the archive exists on both servers
+ls -l /archives/xfusioncorp_blog.zip
+ssh natasha@ststor01 "ls -l /archives/xfusioncorp_blog.zip"
+
+  ```
+
+    ```bash
+  
+  ```
+    ```bash
+  
+  ```
+    ```bash
+  
+  ```
+    ```bash
+  
+  ```
+    ```bash
+  
+  ```
+
+    ```bash
+  
+  ```
+    ```bash
+  
+  ```
+    ```bash
   
   ```
 - **Security Value:** Minimizes human administrative mistakes during cluster operations via rule-based automation scripts.
