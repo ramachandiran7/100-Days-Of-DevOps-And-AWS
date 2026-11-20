@@ -226,33 +226,6 @@ chmod +x /scripts/blog_archive.sh
 # Confirm the archive exists on both servers
 ls -l /archives/xfusioncorp_blog.zip
 ssh natasha@ststor01 "ls -l /archives/xfusioncorp_blog.zip"
-
-  ```
-
-    ```bash
-  
-  ```
-    ```bash
-  
-  ```
-    ```bash
-  
-  ```
-    ```bash
-  
-  ```
-    ```bash
-  
-  ```
-
-    ```bash
-  
-  ```
-    ```bash
-  
-  ```
-    ```bash
-  
   ```
 - **Security Value:** Minimizes human administrative mistakes during cluster operations via rule-based automation scripts.
 - **Verification:** ![Day 10 Verification](./screenshots/devops-day10.png)
@@ -261,7 +234,28 @@ ssh natasha@ststor01 "ls -l /archives/xfusioncorp_blog.zip"
 - **Objective:** Deploy, secure, and optimize the Java servlet web application execution runtime.
 - **Execution:**
   ```bash
-  
+  scp /tmp/ROOT.war steve@stapp02:/tmp/
+
+  ```
+   ```bash
+  ssh steve@stapp02
+sudo yum install -y tomcat
+
+  ```
+   ```bash
+  sudo sed -i 's/port="8080"/port="8085"/g' /etc/tomcat/server.xml
+
+  ```
+   ```bash
+  sudo rm -rf /usr/share/tomcat/webapps/ROOT*
+sudo cp /tmp/ROOT.war /usr/share/tomcat/webapps/ROOT.war
+
+  ```
+   ```bash
+  sudo systemctl start tomcat
+sudo systemctl enable tomcat
+sudo systemctl status tomcat
+
   ```
 - **Security Value:** Implements minimum necessary privilege structures for production application container environments.
 - **Verification:** ![Day 11 Verification](./screenshots/devops-day11.png)
