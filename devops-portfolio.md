@@ -384,7 +384,74 @@ sudo cat /etc/sysconfig/iptables
 - **Objective:** Analyze system calls, trace runaway computations, and mitigate Out-Of-Memory (OOM) crashing events.
 - **Execution:**
   ```bash
-  
+  ssh tony@stapp01
+Password - Ir0nM@n
+sudo su -
+systemctl status httpd
+
+ssh steve@stapp02
+Password - Am3ric@
+sudo su -
+systemctl status httpd
+
+ssh banner@stapp03
+Password - BigGr33n
+sudo su -
+systemctl status httpd
+👉 Identify which one shows:
+
+inactive / failed
+
+🔥 Step 2: Fix Apache on Faulty Server
+
+Check config
+
+httpd -t
+If syntax error → fix config first.
+
+Ensure Apache listens on 8087
+
+grep -n "^Listen" /etc/httpd/conf/httpd.conf
+If not:
+
+sed -i 's/^Listen.*/Listen 8087/' /etc/httpd/conf/httpd.conf
+Check port conflict
+
+ss -tlnp | grep 8087
+If another service is using it → stop that service.
+
+kill -9 <PID>
+Start Apache
+
+systemctl enable httpd
+systemctl restart httpd
+🔥 Step 3 Optional Test
+
+curl http://stapp01:8087
+
+🧠 Part 2: Simple Step-by-Step Explanation (Beginner Friendly)
+
+What is the problem?
+
+One of the servers has Apache not running.
+
+Monitoring detected it.
+
+What we need to do Find which server is broken Start Apache Make sure it runs on port 8087
+
+What is Apache?
+
+Apache is a web server.
+
+It listens on a port and serves web requests.
+
+What is port 8087?
+
+It is the port Apache must use in this lab.
+
+If Apache uses another port, it is considered incorrect.
+
+
   ```
 - **Security Value:** Sustains host system availability parameters against computing resource starvation metrics.
 - **Verification:** ![Day 14 Verification](./screenshots/devops-day14.png)
