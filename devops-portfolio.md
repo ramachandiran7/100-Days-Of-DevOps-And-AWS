@@ -263,9 +263,79 @@ sudo systemctl status tomcat
 #### Day 12: Linux Network Services
 - **Objective:** Interrogate, monitor, and isolate core host networking interface parameters and route ports.
 - **Execution:**
-  ```bash
+### Step 1: Identify the Faulty App Server (From Jump Host)
+Test TCP connectivity to port `3004` on all app servers from `jump-host`:
+```bash
+curl -I http://stapp01:3004
+curl -I http://stapp02:3004
+curl -I http://stapp03:3004
+```
+- **Observation:** `stapp02` and `stapp03` responded, while `stapp01` failed to connect.
+
+---
+
+### Step 2: Connect to the Affected Server (`stapp01`)
+SSH into `stapp01` and switch to the `root` user:
+```bash
+ssh tony@stapp01
+sudo -i
+```
+
+---
+
+### Step 3: Diagnose Apache & Port 3004 Conflict
+Check the status of `httpd` and identify which process is occupying port `3004`:
+```bash
+systemctl status httpd
+ss -tulpn | grep 3004
+```
+- **Command Breakdown:**
+  - `systemctl status httpd`: Checks if Apache is running or why it failed.
+  - `ss -tulpn | grep 3004`: Lists TCP/UDP listening sockets (`-tul`), numeric ports (`-n`), and process names/PIDs (`-p`) bound to port `3004`.
+
+---
+
+### Step 4: Resolve the Port Conflict & Start Apache
+Stop and disable the conflicting service (`sendmail`) so it no longer binds to port `3004`, then start and enable `httpd`:
+```bash
+systemctl stop sendmail
+systemctl disable sendmail
+systemctl enable --now httpd
+systemctl status httpd
+ss -tulpn | grep 3004
+```
+- **Command Breakdown:**
+  - `systemctl stop sendmail` / `disable sendmail`: Stops the conflicting service immediately and prevents it from starting on reboot.
+  - `systemctl enable --now httpd`: Starts Apache immediately and configures it to auto-start at boot.
+
+---
+
+### Step 5: Allow Port 3004 in the Firewall (Persistently)
+Inspect the current `iptables` rules, insert an `ACCEPT` rule for TCP port `3004` above the `REJECT` rule, and save the configuration:
+```bash
+iptables -L INPUT -n --line-numbers
+iptables -I INPUT -p tcp --dport 3004 -j ACCEPT
+iptables-save > /etc/sysconfig/iptables
+```
+- **Command Breakdown:**
+  - `iptables -L INPUT -n --line-numbers`: Displays existing inbound firewall rules with line numbers.
+  - `iptables -I INPUT -p tcp --dport 3004 -j ACCEPT`: Inserts a rule at line `1` of the `INPUT` chain to allow incoming TCP traffic on port `3004` without flushing existing rules.
+  - `iptables-save > /etc/sysconfig/iptables`: Saves the active `iptables` rules so they persist across server reboots.
+
+---
+
+### Step 6: Final Verification (From Jump Host)
+Exit `stapp01` back to `jump-host` and verify HTTP access across all three app servers:
+```bash
+exit
+exit
+curl http://stapp01:3004
+curl http://stapp02:3004
+curl http://stapp03:3004
+```
+- **Expected Result:** All three commands return the web page content from `/var/www/html` on port `3004`.
+
   
-  ```
 - **Security Value:** Surfaces active network processing listeners to rapidly block hidden, unapproved communication backdoors.
 - **Verification:** ![Day 12 Verification](./screenshots/devops-day12.png)
 
@@ -273,8 +343,40 @@ sudo systemctl status tomcat
 - **Objective:** Implement stateful firewall rule matrices at the host level to filter unexpected network traffic.
 - **Execution:**
   ```bash
-  
+  grep stlb01 /etc/hosts
   ```
+  login to lb server
+
+grep stlb01 /etc/hosts
+
+login to appserver1 & appserver2  appserver3
+
+sudo yum install -y iptables iptables-services
+
+sudo systemctl start iptables
+sudo systemctl enable iptables
+
+
+
+sudo iptables -I INPUT 1 -p tcp -s 10.244.97.157 --dport 3003 -j ACCEPT
+sudo iptables -I INPUT 2 -p tcp --dport 3003 -j DROP
+
+• iptables: Calls the firewall tool.
+• -I INPUT 1 / -I INPUT 2: Inserts the rule into the INPUT chain (incoming traffic) at position 1 (very top) and position 2 (right below it).
+• -p tcp: Applies the rule to the TCP network protocol (used by web servers like Apache).
+• -s <STLB01_IP>: Matches traffic coming from this specific source IP address (the load balancer).
+• --dport 3003: Matches traffic heading to destination port 3003.
+• -j ACCEPT: Jumps to the ACCEPT action (lets the traffic through).
+• -j DROP: Jumps to the DROP action (silently blocks all other traffic trying to reach port 3003).
+
+
+
+sudo iptables-save | sudo tee /etc/sysconfig/iptables
+
+sudo iptables -L INPUT -n --line-numbers
+
+sudo cat /etc/sysconfig/iptables
+
 - **Security Value:** Anchors an initial defense-in-depth perimeter directly inside the operating system kernel.
 - **Verification:** ![Day 13 Verification](./screenshots/devops-day13.png)
 
