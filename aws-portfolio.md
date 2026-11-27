@@ -114,7 +114,33 @@
 
 #### Day 18: Create Read-Only IAM Policy for EC2 Console Access
 
-- **Blueprint:** AWS Console → IAM → Policies → Create policy → EC2 → Read-only actions → Review policy → Name policy → Create
+- **Blueprint:** AWS Console → IAM → Policies → Create policy → 
+- You will see Visual editor and JSON tabs.
+
+👉 Switch to the JSON tab
+
+Replace the existing content with the following policy document:
+
+```bash
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeInstances",
+        "ec2:DescribeImages",
+        "ec2:DescribeSnapshots",
+        "ec2:DescribeVolumes",
+        "ec2:DescribeTags"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+This grants read-only (describe) access to:
+EC2 instances, AMIs, Snapshots, Related metadata.  Then → Create
 - **Evidence:** ![Day 18](./screenshots/aws-day18.png)
 
 #### Day 19: Attach IAM Policy to IAM User
